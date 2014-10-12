@@ -8,16 +8,21 @@ server {
 {% endif %}
 {% endfor %}
 
-{% for k,v in item.server.iteritems() if k.find('location') != -1 %}
+{% for k,v in item.server.iteritems() %}
+{% if k.find('location') != -1 %}
 
   location {{ v.name }} {
 
 {% for x,y in v.iteritems() if x != 'name' %}
-      {{ x }} {{ y }};
+	{% if x.find('proxy_set_header') != -1 %}
+		proxy_set_header {{ y }};
+	{% else %}
+		{{ x }} {{ y }};
+	{% endif %}
 {% endfor %}
+	}
 
-  }
-
+{% endif %}
 {% endfor %}
 
 }

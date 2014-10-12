@@ -34,6 +34,13 @@
   notify:
     - restart nginx
 
+- name: Remove default site config from sites-enabled
+  sudo: yes
+  file: path=/etc/nginx/sites-enabled/default
+        state=absent
+  notify:
+    - restart nginx
+
 
 - name: start nginx service
   service: name=nginx state=started enabled=yes
