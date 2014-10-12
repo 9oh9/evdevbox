@@ -1,0 +1,8 @@
+---
+
+gunicorn_upstart:
+  - vars:
+      command: '/home/ubuntu/venvs/eg/bin/gunicorn --config /home/ubuntu/src/eventgine_config'
+      config_name: 'gunicorn.conf'
+
+

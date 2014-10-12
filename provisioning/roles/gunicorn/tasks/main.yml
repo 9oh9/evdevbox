@@ -1,0 +1,18 @@
+---
+
+- name: Create config file
+  copy: src=eventgine_config
+        dest=/home/ubuntu/src/eventgine_config.py
+        owner=www-data
+        group=www-data
+  sudo: yes
+
+- name: Create upstart script for gunicorn
+  template: src=gunicorn.conf.j2
+            dest=/etc/init/{{ item.vars.config_name }}
+  with_items: gunicorn_upstart
+  sudo: yes
+
+- name: Start gunicorn
+  command: start gunicorn
+  sudo: yes

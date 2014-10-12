@@ -1,0 +1,39 @@
+---
+
+- name: Install the nginx packages
+  apt: name={{ item }} state=present update_cache=yes
+  sudo: yes
+  with_items:
+    - nginx
+  environment: env
+
+- name: Create the directories for site configs
+  sudo: yes
+  file: path=/etc/nginx/{{ item }} state=directory owner=root group=root mode=0755
+  with_items:
+    - "sites-available"
+    - "sites-enabled"
+
+- name: Copy the nginx configuration file
+  sudo: yes
+  template: src=nginx.conf.j2 dest=/etc/nginx/nginx.conf
+  notify:
+    - restart nginx
+
+- name: Copy the nginx config files
+  sudo: yes
+  template: src=sites.j2 dest=/etc/nginx/sites-available/{{ item.server.file_name }}
+  with_items: nginx_sites
+  notify:
+    - restart nginx
+
+- name: Symlink sites-available with sites-enabled
+  sudo: yes
+  file: path=/etc/nginx/sites-enabled/{{ item.server.file_name  }} state=link src=/etc/nginx/sites-available/{{ item.server.file_name }}
+  with_items: nginx_sites
+  notify:
+    - restart nginx
+
+
+- name: start nginx service
+  service: name=nginx state=started enabled=yes

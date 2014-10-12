@@ -1,0 +1,5 @@
+---
+
+# this prevents nginx from starting on installation
+env:
+  RUNLEVEL: 1

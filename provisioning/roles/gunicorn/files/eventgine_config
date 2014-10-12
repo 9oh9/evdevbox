@@ -1,0 +1,5 @@
+
+bind = ['0.0.0.0:8000']
+reload = True
+chdir = '/home/ubuntu/src/eventgine/eventgine'
+raw_env = ['PATH=/home/ubuntu/venvs/eg/bin', 'PYTHONUNBUFFERED=1', 'DB_NAME=eventgine_test', 'DB_USER=app_test', 'DB_HOST=54.245.97.150', 'DB_PASS=a0f539b4165ac5cf9d158e084e2ee2d2c3cafda6']

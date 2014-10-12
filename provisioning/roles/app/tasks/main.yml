@@ -1,0 +1,15 @@
+
+- name: creating venv directory
+  file: state=directory
+        path=/home/ubuntu/venvs
+        owner=ubuntu
+        group=ubuntu
+  sudo: yes
+
+- name: creating virtualenv for app
+  shell: virtualenv --python /usr/bin/python3 --no-site-packages /home/ubuntu/venvs/eg
+  sudo: yes
+
+- name: deploy app with setup.py
+  shell: /home/ubuntu/venvs/eg/bin/pip install -e /home/ubuntu/src/eventgine
+  sudo: yes
