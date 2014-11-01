@@ -33,15 +33,20 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # If true, then any SSH connections made will enable agent forwarding.
   # Default value: false
-	config.ssh.forward_agent = true
+  config.ssh.forward_agent = true
 
   # Share an additional folder to the guest VM. The first argument is
   # the path on the host to the actual folder. The second argument is
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
-	#	config.vm.synced_folder "/Users/brentrotz/opensource/ansible", "/vagrant_data"
-  config.vm.synced_folder "/Users/brentrotz/projects/eventgine", "/home/ubuntu/src/eventgine",
-  	owner: "www-data", group: "www-data"
+  # config.vm.synced_folder "/Users/brentrotz/opensource/ansible", "/vagrant_data"
+  require 'yaml'
+  local = YAML.load_file('localpaths.yml')
+
+  config.vm.synced_folder(local['backend'], "/home/ubuntu/src/eventgine",
+    owner: "www-data", group: "www-data")
+  config.vm.synced_folder(local['frontend'], "/home/ubuntu/src/eventgine-static",
+    owner: "www-data", group: "www-data")
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
