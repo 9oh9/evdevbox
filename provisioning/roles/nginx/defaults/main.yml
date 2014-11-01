@@ -6,7 +6,7 @@ env:
 nginx_max_clients: 768
 
 nginx_http_params:
-  sendfile: "on"
+  sendfile: "off"
   tcp_nopush: "on"
   tcp_nodelay: "on"
   keepalive_timeout: 65
@@ -31,6 +31,18 @@ nginx_sites:
 #     ssl_certificate_key: "path/to/key/somekey.key"
       access_log: "/var/log/nginx/eg.access.log"
       error_log: "/var/log/nginx/eg.error.log"
-      location1: {name: "/", try_files: "$uri @eg"}
+      location1: {name: "/", try_files: "$uri /index.html =500", root: "/home/ubuntu/src/eventgine-static/"}
+
+  - server:
+      server_name: "test.api.eventgine.co"
+      file_name: "test.api.eventgine.co"
+      listen: 80
+#     listen: 443
+#     ssl: "on"
+#     ssl_certificate: "path/to/somecert.cert"
+#     ssl_certificate_key: "path/to/key/somekey.key"
+      access_log: "/var/log/nginx/api.eg.access.log"
+      error_log: "/var/log/nginx/api.eg.error.log"
+      location1: {name: "/", try_files: "$uri @eg", root: "/home/ubuntu/src/eventgine/"}
       location2: {name: "@eg", proxy_pass: "http://localhost:8000", proxy_set_header1: "Host $host", proxy_set_header2: "X-Real-IP $remote_addr", proxy_set_header3: "X-Forwarded-For $proxy_add_x_forwarded_for"}
-      location3: {name: "/static", alias: "/home/ubuntu/src/static"}
+
