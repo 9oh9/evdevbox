@@ -14,5 +14,5 @@
   sudo: yes
 
 - name: Start gunicorn
-  command: start gunicorn
+  service: name=gunicorn state=restarted
   sudo: yes

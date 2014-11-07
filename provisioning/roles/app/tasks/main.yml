@@ -8,6 +8,8 @@
 
 - name: creating virtualenv for app
   shell: virtualenv --python /usr/bin/python3 --no-site-packages /home/ubuntu/venvs/eg
+  args:
+    creates: /home/ubuntu/venvs/eg/bin/activate
   sudo: yes
 
 - name: deploy app with setup.py
