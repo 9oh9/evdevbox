@@ -61,6 +61,9 @@ nginx_sites:
                       - "Content-Length 0"
                       - "Content-Type text/plain"
                       - "Access-Control-Allow-Origin *"
+                      - "Access-Control-Allow-Methods \"GET,OPTIONS,HEAD,PUT,POST,DELETE,PATCH\""
+                      - "Access-Control-Allow-Headers \"origin, x-http-method-override, accept, content-type, authorization, x-pingother, if-match, if-modified-since, if-none-match, if-unmodified-since, x-requested-with\""
+                      - "Access-Control-Expose-Headers \"tag, link, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes\""
                     return: "200"
           - name: "@eg"
             configuration:
@@ -69,3 +72,6 @@ nginx_sites:
                 - "Host $host"
                 - "X-Real-IP $remote_addr"
                 - "X-Forwarded-For $proxy_add_x_forwarded_for"
+
+
+
