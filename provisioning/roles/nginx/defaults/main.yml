@@ -15,34 +15,57 @@ nginx_http_params:
   error_log: "/var/log/nginx/error.log"
 
 nginx_sites:
-#  - server:
-#    server_name: "test.kwantera.com"
-#    file_name: "test.kwantera.com"
-#    listen: 80
-#    return: "301 https://murphy.kwantera.com$request_uri"
+  #  - server:
+  #    server_name: "test.kwantera.com"
+  #    file_name: "test.kwantera.com"
+  #    listen: 80
+  #    return: "301 https://murphy.kwantera.com$request_uri"
 
   - server:
-      server_name: "test.eventgine.co"
       file_name: "test.eventgine.co"
-      listen: 80
-#     listen: 443
-#     ssl: "on"
-#     ssl_certificate: "path/to/somecert.cert"
-#     ssl_certificate_key: "path/to/key/somekey.key"
-      access_log: "/var/log/nginx/eg.access.log"
-      error_log: "/var/log/nginx/eg.error.log"
-      location1: {name: "/", try_files: "$uri /index.html =500", root: "/home/ubuntu/src/eventgine-static/"}
+      configuration:
+        server_name: "test.eventgine.co"
+        listen: 80
+        # listen: 443
+        # ssl: "on"
+        # ssl_certificate: "path/to/somecert.cert"
+        # ssl_certificate_key: "path/to/key/somekey.key"
+        access_log: "/var/log/nginx/eg.access.log"
+        error_log: "/var/log/nginx/eg.error.log"
+        location:
+            - name: "/"
+              configuration:
+                try_files: "$uri /index.html =500"
+                root: "/home/ubuntu/src/eventgine-static/"
 
   - server:
-      server_name: "test.api.eventgine.co"
       file_name: "test.api.eventgine.co"
-      listen: 80
-#     listen: 443
-#     ssl: "on"
-#     ssl_certificate: "path/to/somecert.cert"
-#     ssl_certificate_key: "path/to/key/somekey.key"
-      access_log: "/var/log/nginx/api.eg.access.log"
-      error_log: "/var/log/nginx/api.eg.error.log"
-      location1: {name: "/", try_files: "$uri @eg", root: "/home/ubuntu/src/eventgine/"}
-      location2: {name: "@eg", proxy_pass: "http://localhost:8000", proxy_set_header1: "Host $host", proxy_set_header2: "X-Real-IP $remote_addr", proxy_set_header3: "X-Forwarded-For $proxy_add_x_forwarded_for"}
-
+      configuration:
+        server_name: "test.api.eventgine.co"
+        listen: 80
+        # listen: 443
+        # ssl: "on"
+        # ssl_certificate: "path/to/somecert.cert"
+        # ssl_certificate_key: "path/to/key/somekey.key"
+        access_log: "/var/log/nginx/api.eg.access.log"
+        error_log: "/var/log/nginx/api.eg.error.log"
+        location:
+          - name: "/"
+            configuration:
+              try_files: "$uri @eg"
+              root: "/home/ubuntu/src/eventgine/"
+              if:
+                - name: "($request_method = OPTIONS)"
+                  configuration:
+                    add_header:
+                      - "Content-Length 0"
+                      - "Content-Type text/plain"
+                      - "Access-Control-Allow-Origin *"
+                    return: "200"
+          - name: "@eg"
+            configuration:
+              proxy_pass: "http://localhost:8000"
+              proxy_set_header:
+                - "Host $host"
+                - "X-Real-IP $remote_addr"
+                - "X-Forwarded-For $proxy_add_x_forwarded_for"
