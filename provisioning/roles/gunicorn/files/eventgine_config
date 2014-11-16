@@ -1,7 +1,6 @@
 
 bind = ['0.0.0.0:8000']
 reload = True
-chdir = '/home/ubuntu/src/eventgine/eventgine'
 raw_env = [
      'PATH=/home/ubuntu/venvs/eg/bin',
      'PYTHONUNBUFFERED=1',
