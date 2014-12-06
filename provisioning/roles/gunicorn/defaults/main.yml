@@ -2,7 +2,7 @@
 
 gunicorn_upstart:
   - vars:
-      command: "/home/ubuntu/venvs/eg/bin/gunicorn --config /home/ubuntu/src/eventgine_config.py web:app"
+      command: "/home/ubuntu/venvs/eg/bin/gunicorn --config /home/ubuntu/src/eventgine_config.py eventgine.web:app"
       config_name: "gunicorn.conf"
 
 
